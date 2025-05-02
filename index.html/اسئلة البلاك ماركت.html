@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Black Market - قوانين وأسئلة العصابات</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;700&display=swap');
+        
+        :root {
+            --primary-color: #0A0A0A;
+            --secondary-color: #FF0000; /* تم تغيير اللون من الأزرق إلى الأحمر */
+            --accent-color: #FF0000;
+            --text-color: #FFFFFF;
+            --card-bg: rgba(20, 20, 20, 0.8);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            perspective: 1000px;
+        }
+        
+        /* تأثير الجسيمات الخلفية */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+        
+        /* الشريط العلوي */
+        header {
+            background: linear-gradient(to right, rgba(0,0,0,0.8), rgba(20,20,20,0.9));
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.2); /* تم تغيير لون الظل */
+            position: relative;
+            z-index: 10;
+        }
+        
+        /* شعار 3D جديد */
+        .logo-3d-container {
+            position: relative;
+            height: 120px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        .logo-3d {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 4rem;
+            color: var(--secondary-color);
+            text-shadow: 0 0 10px var(--secondary-color), 
+                         0 0 20px var(--secondary-color);
+            letter-spacing: 3px;
+            transform-style: preserve-3d;
+            transform: translateZ(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .logo {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 3rem;
+            text-align: center;
+            color: var(--secondary-color);
+            text-shadow: 0 0 10px var(--secondary-color), 
+                         0 0 20px var(--secondary-color);
+            letter-spacing: 3px;
+            transform-style: preserve-3d;
+            animation: glow 2s infinite alternate;
+        }
+        
+        /* شعار Night Evil الجديد */
+        .night-evil-logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 2rem auto;
+            width: 100%;
+            max-width: 600px;
+        }
+        
+        .night-evil-logo img {
+            width: 100%;
+            height: auto;
+            max-height: 200px;
+            object-fit: contain;
+        }
+        
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px var(--secondary-color);
+            }
+            to {
+                text-shadow: 0 0 20px var(--secondary-color), 
+                            0 0 30px var(--accent-color);
+            }
+        }
+        
+        /* القوائم */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+        
+        .tab-btn {
+            background: var(--card-bg);
+            border: none;
+            color: var(--text-color);
+            padding: 1rem 2rem;
+            margin: 0 1rem;
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transform-style: preserve-3d;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tab-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 0, 0.4), transparent); /* تم تغيير لون التأثير */
+            transition: 0.5s;
+        }
+        
+        .tab-btn:hover::before {
+            left: 100%;
+        }
+        
+        .tab-btn.active {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+            transform: translateY(-5px) rotateX(10deg);
+            box-shadow: 0 15px 30px rgba(255, 0, 0, 0.4); /* تم تغيير لون الظل */
+        }
+        
+        /* محتوى الأقسام */
+        .content-section {
+            display: none;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* بطاقات القوانين */
+        .law-card {
+            background: var(--card-bg);
+            border-left: 3px solid var(--secondary-color);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 5px;
+            transition: all 0.5s ease;
+            transform-style: preserve-3d;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .law-card:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: 0 15px 30px rgba(255, 0, 0, 0.3); /* تم تغيير لون الظل */
+            border-left: 3px solid var(--accent-color);
+        }
+        
+        .law-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 0, 0, 0.05), transparent); /* تم تغيير لون التأثير */
+            z-index: -1;
+        }
+        
+        .law-card h3 {
+            color: var(--secondary-color);
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
+        
+        .law-card p {
+            line-height: 1.6;
+        }
+        
+        /* قسم الأسئلة */
+        .quiz-container {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin: 2rem auto;
+            max-width: 800px;
+            transform-style: preserve-3d;
+        }
+        
+        .quiz-question {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(30, 30, 30, 0.7);
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-color);
+            transition: all 0.3s ease;
+        }
+        
+        .quiz-question:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.2);
+        }
+        
+        .quiz-question p {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+        
+        .answer-btn {
+            background: rgba(255, 0, 0, 0.1); /* تم تغيير لون الخلفية */
+            color: var(--text-color);
+            border: 1px solid var(--secondary-color);
+            padding: 0.5rem 1.5rem;
+            margin: 0.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .answer-btn:hover {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+        
+        .answer-btn.selected {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+        
+        .submit-btn {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+            border: none;
+            padding: 0.8rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 2rem auto;
+            font-family: 'Bebas Neue', cursive;
+            letter-spacing: 1px;
+        }
+        
+        .submit-btn:hover {
+            background: var(--accent-color);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(255, 0, 0, 0.3);
+        }
+        
+        .results {
+            text-align: center;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 10px;
+            margin-top: 2rem;
+            display: none;
+        }
+        
+        .results h3 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+        
+        /* التذييل */
+        footer {
+            background: linear-gradient(to right, rgba(0,0,0,0.8), rgba(20,20,20,0.9));
+            padding: 1.5rem;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 0, 0, 0.2); /* تم تغيير لون الحدود */
+        }
+        
+        footer p {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+        
+        /* تأثيرات ثلاثية الأبعاد */
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px) rotateX(0deg); }
+            50% { transform: translateY(-15px) rotateX(5deg); }
+            100% { transform: translateY(0px) rotateX(0deg); }
+        }
+        
+        /* تصميم متجاوب */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2rem;
+            }
+            
+            .logo-3d {
+                font-size: 3rem;
+            }
+            
+            .tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .tab-btn {
+                margin: 0.5rem 0;
+                width: 80%;
+            }
+            
+            .law-card {
+                padding: 1rem;
+            }
+            
+            .night-evil-logo {
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- تأثير الجسيمات الخلفية -->
+    <div id="particles-js"></div>
+    
+    <!-- الشريط العلوي -->
+    <header>
+        <!-- شعار ثلاثي الأبعاد جديد -->
+        <div class="logo-3d-container" id="logo3d">
+            <div class="logo-3d">BLACK MARKET</div>
+        </div>
+    </header>
+    
+    <!-- شعار Night Evil الجديد -->
+    <div class="night-evil-logo">
+        <img src="https://i.postimg.cc/sx3jzxWp/1111111111.png" alt="Night Evil Logo">
+    </div>
+    
+    <!-- قوائم التنقل -->
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="laws">قوانين العصابات</button>
+        <button class="tab-btn" data-tab="quiz">أسئلة العمليات</button>
+    </div>
+    
+    <!-- قسم القوانين -->
+    <section id="laws" class="content-section active">
+        <div class="law-card">
+            <h3>القانون 1: الالتزام بقوانين السيرفر</h3>
+            <p>يجب على جميع العصابات الالتزام بقوانين السيرفر والقوانين المهمة المعتمدة.</p>
+        </div>
+        
+        <div class="law-card">
+            <h3>القانون 2: احترام جميع الفئات</h3>
+            <p>يجب على كل فرد في العصابة احترام جميع الفئات داخل السيرفر، سواء كانوا مواطنين أو أصحاب مناصب عليا.</p>
+        </div>
+        
+        <div class="law-card">
+            <h3>القانون 3: حماية المسعفين</h3>
+            <p>يُمنع منعًا باتًا خطف أو إيذاء المسعفين.</p>
+        </div>
+        
+        <div class="law-card">
+            <h3>القانون 4: الخطف في المناطق الآمنة</h3>
+            <p>لا يُسمح بالخطف داخل المناطق الآمنة إلا إذا ركب الشخص المستهدف في السيارة، ويجب الانتظار "15" ثانية قبل تنفيذ عملية الخطف.</p>
+        </div>
+        
+        <div class="law-card">
+            <h3>القانون 5: إعلان السرقات</h3>
+            <p>عند تنفيذ السرقات مثل سرقات البنوك، يجب على العصابة إرسال إعلان بالسرقة.</p>
+        </div>
+        
+        <div class="law-card">
+            <h3>القانون 6: مدة احتجاز الرهائن</h3>
+            <p>لا يمكن احتجاز الرهائن لأكثر من "15" دقيقة.</p>
+        </div>
+        
+        <div class="law-card">
+            <h3>القانون 7: توزيع الأسلحة</h3>
+            <p>يُمنع توزيع أسلحة العصابة على المواطنين. إذا تم اكتشاف ذلك، سيتم إصدار تحذير للعصابة، وقد يؤدي الأمر إلى إغلاق العصابة.</p>
+        </div>
+        
+        <div class="law-card">
+            <h3>القانون 8: دخول المقر</h3>
+            <p>إذا دخل شخص إلى مقر العصابة، يحق لأفراد العصابة خطفه أو قتله أو إيذاءه، باستثناء المسعفين.</p>
+        </div>
+        
+        <div class="law-card">
+            <h3>القانون 9: نقل الجثث</h3>
+            <p>يُمنع حمل شخص ميت من المنطقة الآمنة إلى المنطقة غير الآمنة.</p>
+        </div>
+        
+        <div class="law-card">
+            <h3>القانون 10: مداهمة المقرات</h3>
+            <p>يُمنع مداهمة أي مقر عصابة أو مقر حكومي دون إصدار إعلان مسبق، ويجب الانتظار "5" دقائق قبل بدء المداهمة.</p>
+        </div>
+
+        <div class="law-card">
+          <h3>القانون 11:</h3>
+          <p>يمنع استخدام أصدقاء العصابة لخداع العساكر وإيهامهم بأنهم رهائن.</p>
+        </div>
+
+        <div class="law-card">
+          <h3>القانون 12:</h3>
+          <p>يمنع إدخال أي مواطن للمشاركة في سيناريو العصابة. وفي حال تم إصدار إعلان بوجود سيناريو، يحق للعصابة قتل أو خطف أي مواطن يدخل المنطقة، لكن لا يسمح بتلويته.</p>
+        </div>
+
+        <div class="law-card">
+          <h3>القانون 13:</h3>
+          <p>في حال عدم تفاعل العصابة لمدة "7" أيام، سيتم إصدار تحذير بحقها</p>
+        </div>
+
+        <div class="law-card">
+          <h3>القانون 14:</h3>
+          <p>أي عصابة تستخدم القلتشات ستتعرض لتحذير.</p>
+        </div>
+
+        <div class="law-card">
+          <h3>القانون 15:</h3>
+          <p>يمنع على العصابات استخدام الطائرات إلا في حال وجود سيناريو.</p>
+        </div>
+
+        <div class="law-card">
+          <h3>القانون 16:</h3>
+          <p>يمنع على العصابات محاولة السيطرة على المدينة الأولى.</p>
+        </div>
+
+        <div class="law-card">
+          <h3>القانون 17:</h3>
+          <p>يمنع إهانة أي عصابة عبر الإعلانات في حال قمت باهانة عصابة اخرى او قطاع سيتم اعطاء العصابة تحذير .</p>
+        </div>
+
+          </section>
+    
+    <!-- قسم الأسئلة -->
+    <section id="quiz" class="content-section">
+        <div class="quiz-container">
+            <div class="quiz-question">
+                <p>1. هل يُسمح بخطف أو إيذاء المسعفين؟</p>
+                <button class="answer-btn" data-correct="false">نعم</button>
+                <button class="answer-btn" data-correct="true">لا</button>
+            </div>
+
+            <div class="quiz-question">
+                <p>2. هل يُسمح بالخطف داخل المناطق الآمنة؟</p>
+                <button class="answer-btn" data-correct="false">نعم</button>
+                <button class="answer-btn" data-correct="true">لا</button>
+            </div>
+            
+            <div class="quiz-question">
+                <p>3. إذا ركب الشخص المستهدف في السيارة، كم يجب عليك الانتظار؟</p>
+                <button class="answer-btn" data-correct="false">5 ثواني</button>
+                <button class="answer-btn" data-correct="true">15 ثانية</button>
+                <button class="answer-btn" data-correct="false">30 ثانية</button>
+            </div>
+            
+            <div class="quiz-question">
+                <p>4. عند تنفيذ السرقات مثل السرقة (سكربت)، هل يجب على العصابة إرسال إعلان بالسرقة؟</p>
+                <button class="answer-btn" data-correct="true">نعم</button>
+                <button class="answer-btn" data-correct="false">لا</button>
+            </div>
+            
+            <div class="quiz-question">
+                <p>5. ما هي المدة المسموح بها لاحتجاز الرهائن؟</p>
+                <button class="answer-btn" data-correct="false">5 دقائق</button>
+                <button class="answer-btn" data-correct="true">15 دقيقة</button>
+                <button class="answer-btn" data-correct="false">30 دقيقة</button>
+            </div>
+            
+            <div class="quiz-question">
+              <p>6. هل يستطيع رجل العصابه توزيع أسلحة العصابة على المواطنين</p>
+              <button class="answer-btn" data-correct="false">نعم</button>
+              <button class="answer-btn" data-correct="true">لا</button>
+            </div>
+
+            <div class="quiz-question">
+              <p>7. هل يحق لك قتل شخص في حال دخوله إلى مقر العصابة؟</p>
+              <button class="answer-btn" data-correct="true">نعم</button>
+              <button class="answer-btn" data-correct="false">لا</button>
+            </div>
+
+            <div class="quiz-question"> 
+              <p>8.  بعد قتلك لشخص و تلويته هل يحق لك خطفه؟ </p>
+              <button class="answer-btn" data-correct="false">نعم</button>
+              <button class="answer-btn" data-correct="true">لا</button>
+            </div>
+
+            <div class="quiz-question"> 
+              <p>9.   هل يسمح حمل شخص من المنطقة الآمنة إلى المنطقة غير الآمنة وهو ميت؟</p>
+              <button class="answer-btn" data-correct="false">نعم</button>
+              <button class="answer-btn" data-correct="true">لا</button>
+            </div>
+
+            <div class="quiz-question"> 
+              <p>10.   هل يحق لك مداهمة أي مقر عصابة أو مقر حكومي دون إصدار إعلان؟</p>
+              <button class="answer-btn" data-correct="false">نعم</button>
+              <button class="answer-btn" data-correct="true">لا</button>
+            </div>
+
+            <div class="quiz-question"> 
+              <p>11.   هل يسمح ل اعضاء العصابه استخدام الطائرات البلاك بدون اذن؟</p>
+              <button class="answer-btn" data-correct="false">نعم</button>
+              <button class="answer-btn" data-correct="true">لا</button>
+            </div>
+
+            <div class="quiz-question"> 
+              <p>12.   هل يسمح إهانة أي عصابة او رجل أمن عبر الإعلانات؟</p>
+              <button class="answer-btn" data-correct="false">نعم</button>
+              <button class="answer-btn" data-correct="true">لا</button>
+            </div>
+
+            <div class="quiz-question"> 
+              <p>13.   هل يحق لك كلبشه المواطنين في المناطق الأمنه؟</p>
+              <button class="answer-btn" data-correct="false">نعم</button>
+              <button class="answer-btn" data-correct="true">لا</button>
+            </div>
+
+            <button class="submit-btn">تحقق من الإجابات</button>
+            
+            <div class="results">
+                <h3>نتيجتك</h3>
+                <p>الإجابات الصحيحة: <span id="correct-answers">0</span></p>
+                <p>الإجابات الخاطئة: <span id="wrong-answers">0</span></p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- التذييل -->
+    <footer>
+        <p>2025 BLACK MARKET (TOBi) - جميع الحقوق محفوظة</p>
+    </footer>
+    
+    <!-- مكتبات الجافاسكريبت -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // تهيئة تأثير الجسيمات
+        particlesJS("particles-js", {
+            "particles": {
+                "number": {
+                    "value": 80,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": "#FF0000" // تم تغيير لون الجسيمات إلى الأحمر
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
+                    }
+                },
+                "opacity": {
+                    "value": 0.5,
+                    "random": true,
+                    "anim": {
+                        "enable": true,
+                        "speed": 1,
+                        "opacity_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": 3,
+                    "random": true,
+                    "anim": {
+                        "enable": true,
+                        "speed": 2,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#FF0000", // تم تغيير لون الخطوط إلى الأحمر
+                    "opacity": 0.4,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 2,
+                    "direction": "none",
+                    "random": true,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false,
+                    "attract": {
+                        "enable": true,
+                        "rotateX": 600,
+                        "rotateY": 1200
+                    }
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "grab"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 140,
+                        "line_linked": {
+                            "opacity": 1
+                        }
+                    },
+                    "bubble": {
+                        "distance": 400,
+                        "size": 40,
+                        "duration": 2,
+                        "opacity": 8,
+                        "speed": 3
+                    },
+                    "repulse": {
+                        "distance": 200,
+                        "duration": 0.4
+                    },
+                    "push": {
+                        "particles_nb": 4
+                    },
+                    "remove": {
+                        "particles_nb": 2
+                    }
+                }
+            },
+            "retina_detect": true
+        });
+        
+        // تبديل الأقسام
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const contentSections = document.querySelectorAll('.content-section');
+        
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // إزالة النشاط من جميع الأزرار والأقسام
+                tabBtns.forEach(btn => btn.classList.remove('active'));
+                contentSections.forEach(section => section.classList.remove('active'));
+                
+                // إضافة النشاط للزر والقسم المحدد
+                btn.classList.add('active');
+                const tabId = btn.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // نظام الأسئلة
+        const answerBtns = document.querySelectorAll('.answer-btn');
+        const submitBtn = document.querySelector('.submit-btn');
+        const resultsDiv = document.querySelector('.results');
+        const correctAnswersSpan = document.getElementById('correct-answers');
+        const wrongAnswersSpan = document.getElementById('wrong-answers');
+        
+        let selectedAnswers = {};
+        
+        answerBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const questionDiv = this.parentElement;
+                const questionId = questionDiv.querySelector('p').textContent;
+                
+                // إزالة التحديد من جميع أزرار هذا السؤال
+                questionDiv.querySelectorAll('.answer-btn').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+                
+                // تحديد الزر المختار
+                this.classList.add('selected');
+                selectedAnswers[questionId] = this.getAttribute('data-correct') === 'true';
+            });
+        });
+        
+        submitBtn.addEventListener('click', function() {
+            let correct = 0;
+            let wrong = 0;
+            
+            for (const question in selectedAnswers) {
+                if (selectedAnswers[question]) {
+                    correct++;
+                } else {
+                    wrong++;
+                }
+            }
+            
+            correctAnswersSpan.textContent = correct;
+            wrongAnswersSpan.textContent = wrong;
+            resultsDiv.style.display = 'block';
+            
+            // تأثير ظهور النتيجة
+            resultsDiv.style.animation = 'none';
+            setTimeout(() => {
+                resultsDiv.style.animation = 'fadeIn 0.5s ease';
+            }, 10);
+        });
+        
+        // تأثيرات ثلاثية الأبعاد للبطاقات
+        const lawCards = document.querySelectorAll('.law-card');
+        
+        lawCards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+                const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+                card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+            });
+            
+            card.addEventListener('mouseenter', () => {
+                card.style.transition = 'none';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transition = 'all 0.5s ease';
+                card.style.transform = 'rotateY(0deg) rotateX(0deg)';
+            });
+        });
+        
+        // إضافة تأثير ثلاثي الأبعاد للشعار الجديد
+        const logo3d = document.getElementById('logo3d');
+        const logo3dText = document.querySelector('.logo-3d');
+        
+        logo3d.addEventListener('mousemove', (e) => {
+            const xPos = (e.clientX / window.innerWidth - 0.5) * 20;
+            const yPos = (e.clientY / window.innerHeight - 0.5) * 20;
+            
+            logo3dText.style.transform = `translateZ(50px) rotateX(${-yPos}deg) rotateY(${xPos}deg)`;
+            logo3dText.style.textShadow = `
+                ${xPos * 0.5}px ${yPos * 0.5}px 5px rgba(255, 0, 0, 0.6),
+                ${-xPos * 0.5}px ${-yPos * 0.5}px 5px rgba(0, 0, 0, 0.6),
+                0 0 20px rgba(255, 0, 0, 0.8),
+                0 0 30px rgba(255, 0, 0, 0.6)
+            `;
+        });
+        
+        logo3d.addEventListener('mouseenter', () => {
+            logo3dText.style.transition = 'transform 0.1s ease';
+        });
+        
+        logo3d.addEventListener('mouseleave', () => {
+            logo3dText.style.transition = 'transform 0.5s ease, text-shadow 0.5s ease';
+            logo3dText.style.transform = 'translateZ(0) rotateX(0deg) rotateY(0deg)';
+            logo3dText.style.textShadow = '0 0 10px #FF0000, 0 0 20px #FF0000';
+        });
+    </script>
+</body>
+</html>
